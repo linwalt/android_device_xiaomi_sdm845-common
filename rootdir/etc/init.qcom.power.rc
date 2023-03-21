@@ -30,13 +30,19 @@ on early-init
     write /proc/sys/kernel/sched_boost 1
 
 on init
-    write /dev/stune/foreground/schedtune.sched_boost_no_override 1
-    write /dev/stune/top-app/schedtune.sched_boost_no_override 1
+    write /dev/stune/foreground/schedtune.sched_boost_no_override 0
+    write /dev/stune/top-app/schedtune.sched_boost_no_override 0
     write /dev/stune/schedtune.colocate 0
     write /dev/stune/background/schedtune.colocate 0
     write /dev/stune/system-background/schedtune.colocate 0
     write /dev/stune/foreground/schedtune.colocate 0
-    write /dev/stune/top-app/schedtune.colocate 1
+    write /dev/stune/top-app/schedtune.colocate 0
+    write /dev/stune/top-app/schedtune.sched_boost_enabled 0
+    write /dev/stune/foreground/schedtune.sched_boost_enabled 0
+    write /dev/stune/rt/schedtune.sched_boost_enabled 0
+    write /dev/stune/camera-daemon/schedtune.sched_boost_enabled 0
+    write /dev/stune/background/schedtune.sched_boost_enabled 0
+    write /dev/stune/schedtune.sched_boost_enabled 0    
 
     # Disable UFS powersaving
     write /sys/devices/platform/soc/${ro.boot.bootdevice}/clkgate_enable 0
@@ -68,10 +74,14 @@ on init
     write /sys/devices/system/cpu/cpu4/cpufreq/schedutil/down_rate_limit_us 20000
 
     # Set default schedTune value for foreground/top-app
-    write /dev/stune/foreground/schedtune.prefer_idle 1
-    write /dev/stune/top-app/schedtune.boost 10
-    write /dev/stune/top-app/schedtune.prefer_idle 1
+    write /dev/stune/foreground/schedtune.prefer_idle 0
+    write /dev/stune/top-app/schedtune.boost 0
+    write /dev/stune/top-app/schedtune.prefer_idle 0
 
+     # Configure cpu boost
+    write /sys/module/cpu_boost/parameters/input_boost_ms 0
+    write /sys/module/cpu_boost/parameters/input_boost_freq "0:0"
+    
     # Add a cpuset for the camera daemon
     mkdir /dev/cpuset/camera-daemon
     write /dev/cpuset/camera-daemon/cpus 0-7
@@ -149,7 +159,7 @@ on enable-low-power
     write /proc/irq/default_smp_affinity "f"
 
     # Core control parameters
-    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 2
+    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 0
     write /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres 60
     write /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres 30
     write /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms 100
