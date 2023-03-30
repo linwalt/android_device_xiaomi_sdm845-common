@@ -78,3 +78,4 @@ telephony.lteOnCdmaDevice=1
 
 # Zygote
 persist.device_config.runtime_native.usap_pool_enabled=true
+ro.build.stock_sec_patch=2020-12-01
