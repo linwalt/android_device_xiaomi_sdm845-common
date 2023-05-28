@@ -214,8 +214,8 @@
       "Name": "CPUBigClusterCoreCtl",
       "Path": "/sys/devices/system/cpu/cpu4/core_ctl/enable",
       "Values": [
-        "1",
-        "0"
+        "0",
+        "1"
       ],
       "ResetOnInit": true
     },
